@@ -24,9 +24,7 @@ let getReposByUsername = (/* TODO */username, callback) => {
     if (err) {
       console.log (err) // come back and make this better later
     }
-
-    callback(body);
-
+    callback(err, body);
   })
 
 }

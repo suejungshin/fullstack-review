@@ -15,24 +15,23 @@ app.post('/repos', function (req, res) {
 
   let username = Object.keys(req.body)[0] // I don't know why it comes back in an object - go investigate this later
 
-  helpers.getReposByUsername(username, (body) => {
-    let parsedReposList = JSON.parse(body)
+  helpers.getReposByUsername(username, (err, body) => {
+    let parsedReposList = JSON.parse(body);
+
     for (let i = 0; i < parsedReposList.length; i++) {
-      db.save(null, parsedReposList[i]); // figure out error handling instead of null later
+      db.save(err, parsedReposList[i]); // figure out error handling instead of null later
     }
+
+    res.send('Heres something for you for posting!');
   });
 
-  res.send('Heres something for you for posting!');
 });
 
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
 
-  let username = Object.keys(req.body)[0]
-
   db.find((err, documents)=> {
-    console.log(username)
     console.log(documents)
     res.send(documents)
   })

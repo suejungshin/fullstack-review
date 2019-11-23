@@ -8,34 +8,47 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repos: []
+      repos: [],
+      username: ''
     }
 
     this.get = this.get.bind(this);
   }
 
+  componentDidMount() {
+    this.get()
+  }
+
+  componentDidUpdate() {
+    this.render()
+  }
+
   search (term) {
     console.log(`${term} was searched`);
     // TODO
+    this.setState({username: term})
     $.ajax({
       method: 'POST',
       url: 'http://localhost:1128/repos',
       data: term,
-      success: (term) => {
-        this.get(term);
-        console.log('Success callback for post request here')
+      success: () => {
+        this.get();
+        console.log('post request successful')
       }
     })
   }
 
-  get (term) {
-    console.log(`${term} was requested`);
+  get () {
     // TODO
     $.ajax({
       method: 'GET',
       url: 'http://localhost:1128/repos',
       success: (data) => {
-        this.setState({repos: this.state.repos.concat(data)}, this.render);
+        this.setState((state) => {
+          console.log('get request successful')
+          state.repos = state.repos.concat(data);
+          return state;
+        }, this.render);
       }
     })
   }
@@ -44,7 +57,7 @@ class App extends React.Component {
     return (<div>
       <h1>Github Fetcher</h1>
       <Search onSearch={this.search.bind(this)}/>
-      <RepoList repos={this.state.repos}/>
+      <RepoList username={this.state.username} repos={this.state.repos}/>
     </div>)
   }
 }
