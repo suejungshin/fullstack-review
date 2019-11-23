@@ -18,11 +18,12 @@ app.post('/repos', function (req, res) {
   helpers.getReposByUsername(username, (err, body) => {
     let parsedReposList = JSON.parse(body);
 
+    let promisesArr = [];
     for (let i = 0; i < parsedReposList.length; i++) {
-      db.save(err, parsedReposList[i]); // figure out error handling instead of null later
+      promisesArr.push(db.save(err, parsedReposList[i])); // figure out error handling instead of null later
     }
+    Promise.all(promisesArr).catch(()=>{res.status(500).send()}).then(()=> {res.status(200).send('Heres something for you for posting!')});
 
-    res.send('Heres something for you for posting!');
   });
 
 });
@@ -30,7 +31,6 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
-
   db.find((err, documents)=> {
     console.log(documents)
     res.send(documents)

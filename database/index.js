@@ -31,32 +31,20 @@ let save = (err, data) => {
   // This function should save a repo or repos to
   // the MongoDB
 
-
   let myRepoDocument = new Repo(data);
-  myRepoDocument.save((err, myRepoDocument) => {
+  return myRepoDocument.save((err, myRepoDocument) => {
     if (err) {
       return console.error(err)  // make this a more meaningful error message later
     }
-    Repo.find({}).sort({forks_count : -1}).limit(25);
-
-    // console.log('yay you saved to the db, heres your repoDocument:', myRepoDocument)
-  //   Repo.find({} , (err, documents) => {
-  //    console.log('see there it is! in the documents: ', documents);
-  //  })
 
   })
 
-
 }
 
-// // check out how I'm doing by console logging
-// Repo.find({}, (err, documents) => {
-//   console.log('documents: ', documents)
-// })
 
 
 let find = (callback) => {
-  Repo.find({}).sort({forks_count: -1}).exec( (err, documents) => {
+  Repo.find({}).sort({forks_count: -1}).limit(25).exec( (err, documents) => {
     console.log('thisiswhatiwant', documents)
     callback(err, documents)
   })
@@ -65,3 +53,17 @@ let find = (callback) => {
 
 module.exports.save = save;
 module.exports.find = find;
+
+
+// // check out how I'm doing by console logging
+// Repo.find({}, (err, documents) => {
+//   console.log('documents: ', documents)
+// })
+
+
+   // Repo.find({}).sort({forks_count : -1}).limit(25);
+
+    // console.log('yay you saved to the db, heres your repoDocument:', myRepoDocument)
+  //   Repo.find({} , (err, documents) => {
+  //    console.log('see there it is! in the documents: ', documents);
+  //  })

@@ -32,8 +32,8 @@ class App extends React.Component {
       url: 'http://localhost:1128/repos',
       data: term,
       success: () => {
-        this.get();
         console.log('post request successful')
+        this.get();
       }
     })
   }
@@ -48,7 +48,7 @@ class App extends React.Component {
           console.log('get request successful')
           state.repos = state.repos.concat(data);
           return state;
-        }, this.render);
+        });
       }
     })
   }
